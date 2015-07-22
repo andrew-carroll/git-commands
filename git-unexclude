@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+module GitUnexcluder
+  class << self
+    def unexclude(filename)
+      @lines = File.readlines('.git/info/exclude').map(&:strip)
+      if is_regex?(filename)
+        unexclude_pattern(pattern)
+      else
+        unexclude_file(filename)
+      end
+      File.write('.git/info/exclude', @lines.join("\n") + "\n")
+      system('git status')
+    end
+    
+    private
+    
+    def is_regex?(file)
+      regex_regex = /\A\/.*[^\\]\//
+      !!file.match(regex_regex)
+    end
+    
+    def unexclude_pattern(pattern)
+      pattern = Regexp.new(file[1..-2])
+      @lines.reject! do |line|
+        line.match pattern
+      end
+    end
+    
+    def unexclude_file(file)
+      @lines.reject! do |line|
+        line == file
+      end
+    end
+  end
+end
+
+ARGV.each do |arg|
+  GitUnexcluder.unexclude arg
+end

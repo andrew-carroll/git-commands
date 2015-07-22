@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+gitexclude = File.open('.git/info/exclude','a')
+ARGV.each {|filename| gitexclude.puts filename }
+gitexclude.close
+system('git status')

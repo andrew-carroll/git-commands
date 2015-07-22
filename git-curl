@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+if ARGV.length < 2
+  puts "Usage: git curl someusername/somegitrepo path/to/file"
+  exit
+end
+repo, file = ARGV
+url = "https://raw.githubusercontent.com/#{repo}/master/#{file}"
+system "curl #{url}"
+puts
