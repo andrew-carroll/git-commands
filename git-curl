@@ -1,10 +1,9 @@
-#!/usr/bin/env ruby
+#!/bin/bash
 
-if ARGV.length < 2
-  puts "Usage: git curl someusername/somegitrepo path/to/file"
-  exit
-end
-repo, file = ARGV
-url = "https://raw.githubusercontent.com/#{repo}/master/#{file}"
-system "curl #{url}"
-puts
+if [[ $# -ne 2 ]]; then
+  echo "Usage: $0 ghusername/repo path/to/file" >&2
+  exit 1
+fi
+
+URL="https://raw.githubusercontent.com/$1/master/$2"
+curl $URL
